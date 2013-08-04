@@ -33,3 +33,9 @@ do
   header "Docker: I/O Test $io_test"
   docker run -t $image_name bash -c "$(iotest $io_test)"
 done
+
+header "Host Machine CPU Battery"
+sysbench --num-threads=${num_threads} --max-requests=${max_requests} --test=cpu run
+
+header "Docker CPU Battery"
+docker run -t $image_name sysbench --num-threads=${num_threads} --max-requests=${max_requests} --test=cpu run
