@@ -18,7 +18,7 @@ header "Building Docker Image"
 docker build -t $image_name .
 
 header "Installing sysbench locally if not already installed"
-sudo apt-get install -y sysbench
+apt-get install -y sysbench
 
 for io_test in $io_tests
 do
