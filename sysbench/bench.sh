@@ -11,9 +11,11 @@ iotest() {
 }
 
 header() {
+  echo
   echo "---------"
   echo $*
   echo "---------"
+  echo
 }
 
 header "Building Docker Image"
