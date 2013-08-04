@@ -12,6 +12,8 @@ correct for your workload and accurate.
 Please check in each directory for additional instructions for the type of
 benchmarks.
 
+All suites assume docker is already installed and running.
+
 ## Benchmark Suites
 
 Each directory is its own suite.
