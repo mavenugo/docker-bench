@@ -5,7 +5,7 @@ image_name=sysbench
 io_tests="seqwr seqrewr seqrd rndrd rndwr rndrw"
 
 iotest() {
-  echo "sysbench --test=fileio prepare && sysbench --file-test-mode=$1 --test=fileio run; sysbench --test=fileio cleanup"
+  echo "sysbench --test=fileio prepare && sysbench --max-requests=1000000 --file-test-mode=$1 --test=fileio run; sysbench --test=fileio cleanup"
 }
 
 header() {
