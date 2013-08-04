@@ -13,7 +13,6 @@ max_requests=100000
 # just change this to a number if you want to use something fixed
 num_threads=$(cat /proc/cpuinfo | grep processor | wc -l)
 image_name=sysbench
-io_tests="seqwr seqrewr seqrd rndrd rndwr rndrw"
 
 iotest() {
   echo "sysbench --test=fileio prepare && sysbench --num-threads=${num_threads} --max-requests=${max_requests} --file-test-mode=$1 --test=fileio run; sysbench --test=fileio cleanup"
@@ -57,7 +56,21 @@ run_cpu_tests() {
   docker run -t $image_name sysbench --num-threads=${num_threads} --max-requests=${max_requests} --test=cpu run
 }
 
+run_memory_tests() {
+  for oper in read write
+  do
+    for mode in seq rnd
+    do
+      header "Host Machine Memory Test: $mode $oper"
+      sysbench --num-threads=${num_threads} --max-requests=${max_requests} --test=memory --memory-oper=${oper} --memory-access-mode=${mode} run
+      header "Docker Memory Test: $mode $oper"
+      docker run -t $image_name sysbench --num-threads=${num_threads} --max-requests=${max_requests} --test=memory --memory-oper=${oper} --memory-access-mode=${mode} run
+    done
+  done
+}
+
 build_docker_image
 install_sysbench
 run_io_tests
 run_cpu_tests
+run_memory_tests
