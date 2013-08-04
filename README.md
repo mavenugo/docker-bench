@@ -14,6 +14,9 @@ benchmarks.
 
 All suites assume docker is already installed and running.
 
+I'm not unfamiliar with the phrase "math is hard" so take all this code with a
+grain of salt.
+
 ## Benchmark Suites
 
 Each directory is its own suite.
