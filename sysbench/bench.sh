@@ -1,7 +1,7 @@
 #!/bin/sh
 # vim: ft=sh sw=2 ts=2 st=2 sts=2 et
 
-max_requests=1000000
+max_requests=100000
 num_threads=$(cat /proc/cpuinfo | grep processor | wc -l)
 image_name=sysbench
 io_tests="seqwr seqrewr seqrd rndrd rndwr rndrw"
