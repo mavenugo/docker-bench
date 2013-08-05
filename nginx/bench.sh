@@ -51,6 +51,10 @@ install_wrk() {
   fi
 }
 
+add_file_cache() {
+  echo "echo 'open_file_cache max=500;' >>/etc/nginx.conf"
+}
+
 start_nginx() {
   echo "killall nginx 2>&1 >/dev/null; nginx"
 }
@@ -60,14 +64,23 @@ run_wrk() {
 }
 
 run_nocache_test() { 
-  header "Running local test against port 80"
+  header "Running local test against port 80 with no file cache"
   bash -c "$(start_nginx); $(run_wrk 80)"
 
-  header "Docker Test 1: Locally in Docker against port 80"
+  header "Docker Test 1: Locally in Docker against port 80 with no file cache"
   docker run -t $image_name bash -c "$(start_nginx); $(run_wrk 80)"
+}
+
+run_cache_test() {
+  header "Running local test against port 80 with file cache"
+  bash -c "$(add_file_cache); $(start_nginx); $(run_wrk 80)"
+
+  header "Docker Test 1: Locally in Docker against port 80 with file cache"
+  docker run -t $image_name bash -c "$(add_file_cache); $(start_nginx); $(run_wrk 80)"
 }
 
 build_docker_image
 install_nginx
 install_wrk
 run_nocache_test
+run_cache_test
