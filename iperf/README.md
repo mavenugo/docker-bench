@@ -12,6 +12,7 @@ Tests are for both TCP and UDP
 
 * Host only test: iperf over localhost
 * Docker Test 1: iperf client from the host to docker server
+* Docker Test 2: iperf client on docker, iperf server on docker
 
 # Current Issues
 

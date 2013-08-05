@@ -39,11 +39,20 @@ run_tcp_test() {
   killall -KILL iperf
 
   header "TCP Test: through bridge"
-  docker run -p 5001 $image_name bash -c "iperf -s" &
+  docker run -p 5001 -t $image_name bash -c "iperf -s" &
   sleep 1
   docker_container=$(docker ps -q)
   docker_port=$(docker port ${docker_container} 5001)
   iperf -f m -c localhost -p ${docker_port} -P ${num_threads}
+  docker stop ${docker_container}
+  docker rm ${docker_container}
+  
+  header "TCP Test: Docker <-> Docker through host bridge"
+  docker run -p 5001 -t $image_name bash -c "iperf -s" &
+  sleep 1
+  docker_container=$(docker ps -q)
+  docker_port=$(docker port ${docker_container} 5001)
+  docker run -t iperf bash -c "iperf -f m -c \$(ip route | head -1 | awk '{ print \$3 }') -p ${docker_port} -P ${num_threads}"
   docker stop ${docker_container}
   docker rm ${docker_container}
 }
@@ -60,6 +69,15 @@ run_udp_test() {
   docker_container=$(docker ps -q)
   docker_port=$(docker port ${docker_container} 5001)
   iperf -f m -u -c localhost -p ${docker_port} -P ${num_threads}
+  docker stop ${docker_container}
+  docker rm ${docker_container}
+  
+  header "UDP Test: Docker <-> Docker through host bridge"
+  docker run -p 5001 -t $image_name bash -c "iperf -u -s" &
+  sleep 1
+  docker_container=$(docker ps -q)
+  docker_port=$(docker port ${docker_container} 5001)
+  docker run -t iperf bash -c "iperf -f m -u -c \$(ip route | head -1 | awk '{ print \$3 }') -p ${docker_port} -P ${num_threads}"
   docker stop ${docker_container}
   docker rm ${docker_container}
 }
