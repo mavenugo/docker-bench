@@ -61,7 +61,7 @@ cleanup_nginx_config() {
 }
 
 start_nginx() {
-  echo "killall nginx 2>&1 >/dev/null; nginx"
+  echo "killall nginx; nginx"
 }
 
 run_wrk() {
