@@ -6,5 +6,5 @@ RUN echo "deb-src http://archive.ubuntu.com/ubuntu precise-updates main restrict
 RUN echo "deb http://security.ubuntu.com/ubuntu precise-security main restricted universe" >> /etc/apt/sources.list
 RUN echo "deb-src http://security.ubuntu.com/ubuntu precise-security main restricted universe" >> /etc/apt/sources.list
 RUN apt-get update
-RUN apt-get install libssl-dev git-core build-essential nginx -y
+RUN apt-get install libssl-dev git-core build-essential nginx psmisc -y
 RUN (git clone https://github.com/wg/wrk && cd wrk && make && cp wrk /usr/local/bin)
