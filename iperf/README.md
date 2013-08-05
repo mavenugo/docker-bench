@@ -21,3 +21,5 @@ finishing the tests. At this time I do not have a solution to this problem.
 
 Running the lxc tests for UDP, iperf will complain that it has lost the last
 two datagrams. I don't think this is an issue, but it should be mentioned.
+
+TTY management on the server side is a bit of a mess; so I've muted it.
