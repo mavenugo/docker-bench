@@ -12,7 +12,8 @@ correct for your workload and accurate.
 Please check in each directory for additional instructions for the type of
 benchmarks.
 
-All suites assume docker is already installed and running.
+All suites assume docker is already installed and running. Most of them assume
+this machine is theirs to command -- e.g., no critical functions run on it.
 
 I'm not unfamiliar with the phrase "math is hard" so take all this code with a
 grain of salt.
