@@ -52,7 +52,12 @@ install_wrk() {
 }
 
 add_file_cache() {
-  echo "echo 'open_file_cache max=500;' >>/etc/nginx.conf"
+  echo "sed -i 's/# @OPEN_FILE_CACHE@/open_file_cache max=500;/' /etc/nginx/nginx.conf"
+}
+
+cleanup_nginx_config() {
+  header "Resetting nginx configuration on local machine"
+  cp nginx.conf /etc/nginx/nginx.conf
 }
 
 start_nginx() {
@@ -64,19 +69,21 @@ run_wrk() {
 }
 
 run_nocache_test() { 
-  header "Running local test against port 80 with no file cache"
+  cleanup_nginx_config
+  header "Running local test against port 80 with no open file cache"
   bash -c "$(start_nginx); $(run_wrk 80)"
 
-  header "Docker Test 1: Locally in Docker against port 80 with no file cache"
+  header "Docker Test 1: Locally in Docker against port 80 with no open file cache"
   docker run -t $image_name bash -c "$(start_nginx); $(run_wrk 80)"
 }
 
 run_cache_test() {
-  header "Running local test against port 80 with file cache"
+  cleanup_nginx_config
+  header "Running local test against port 80 with open file cache"
   bash -c "$(add_file_cache); $(start_nginx); $(run_wrk 80)"
 
-  header "Docker Test 1: Locally in Docker against port 80 with file cache"
-  docker run -t $image_name bash -c "$(add_file_cache); $(start_nginx); $(run_wrk 80)"
+  header "Docker Test 1: Locally in Docker against port 80 with open file cache"
+  docker run -t $image_name bash -c "$(add_file_cache); cat /etc/nginx/nginx.conf; $(start_nginx); $(run_wrk 80)"
 }
 
 build_docker_image
