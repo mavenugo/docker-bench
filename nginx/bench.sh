@@ -83,7 +83,7 @@ run_cache_test() {
   bash -c "$(add_file_cache); $(start_nginx); $(run_wrk 80)"
 
   header "Docker Test 1: Locally in Docker against port 80 with open file cache"
-  docker run -t $image_name bash -c "$(add_file_cache); cat /etc/nginx/nginx.conf; $(start_nginx); $(run_wrk 80)"
+  docker run -t $image_name bash -c "$(add_file_cache); $(start_nginx); $(run_wrk 80)"
 }
 
 build_docker_image
