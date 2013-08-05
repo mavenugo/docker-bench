@@ -61,10 +61,9 @@ run_wrk() {
 
 run_nocache_test() { 
   header "Running local test against port 80"
-  bash -c "$(start_nginx)"
-  bash -c "$(run_wrk 80)"
+  bash -c "$(start_nginx); $(run_wrk 80)"
 
-  header "Docker Test 1: Locally in Docker"
+  header "Docker Test 1: Locally in Docker against port 80"
   docker run -t $image_name bash -c "$(start_nginx); $(run_wrk 80)"
 }
 
