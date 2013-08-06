@@ -75,6 +75,7 @@ run_nocache_test() {
 
   header "Docker Test 1: Locally in Docker against port 80 with no open file cache"
   docker run -t $image_name bash -c "$(start_nginx); $(run_wrk 80)"
+  sleep 1
 
   header "Docker Test 2: Remotely into Docker from the Host Machine with no open file cache"
   docker run -p 80 $image_name bash -c "$(start_nginx); sleep 1d" &
@@ -93,6 +94,7 @@ run_cache_test() {
 
   header "Docker Test 1: Locally in Docker against port 80 with open file cache"
   docker run -t $image_name bash -c "$(add_file_cache); $(start_nginx); $(run_wrk 80)"
+  sleep 1
   
   header "Docker Test 2: Remotely into Docker from the Host Machine with open file cache"
   docker run -p 80 $image_name bash -c "$(add_file_cache); $(start_nginx); sleep 1d" &
