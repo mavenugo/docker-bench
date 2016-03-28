@@ -36,7 +36,7 @@ install_iperf() {
 run_tcp_test() {
   header "TCP Test: localhost only"
   iperf -s -D
-  iperf -f m -c localhost -P ${num_threads}
+  iperf -f m -c localhost -P ${num_threads} -M 1300 -m
   killall -KILL iperf
   sleep 5
 
@@ -45,44 +45,48 @@ run_tcp_test() {
   sleep 1
   docker_container=$(docker ps -q)
   docker_port=$(docker port ${docker_container} 5001)
-  iperf -f m -c localhost -p ${host_port} -P ${num_threads}
+  iperf -f m -c localhost -p ${host_port} -P ${num_threads} -M 1300 -m
   docker stop ${docker_container}
   docker rm ${docker_container}
+  sleep 3
   
   header "TCP Test: Docker <-> Docker through host bridge"
-  docker run -p $host_port:5001 -t $image_name bash -c "iperf -s" &
+  docker run -d -p $host_port:5001 -t $image_name bash -c "iperf -s"
   sleep 1
   docker_container=$(docker ps -q)
   docker_port=$(docker port ${docker_container} 5001)
-  docker run -t iperf bash -c "iperf -f m -c \$(ip route | head -1 | awk '{ print \$3 }') -p ${host_port} -P ${num_threads}"
+  docker run -t iperf bash -c "iperf -f m -c \$(ip route | head -1 | awk '{ print \$3 }') -p ${host_port} -P ${num_threads} -M 1300 -m"
   docker stop ${docker_container}
   docker rm ${docker_container}
+  sleep 3
 }
 
 run_udp_test() {
   header "UDP Test: localhost only"
-  iperf -u -s -D
-  iperf -f m -u -c localhost -P ${num_threads}
+  iperf -u -s -D &
+  iperf -f m -u -c localhost -P ${num_threads} -M 1300 -m
   killall -KILL iperf
   sleep 5
 
   header "UDP Test: through bridge"
-  docker run -p $host_port:5001 $image_name bash -c "iperf -u -s" &
+  docker run -d -p $host_port:5001 $image_name bash -c "iperf -u -s"
   sleep 1
   docker_container=$(docker ps -q)
   docker_port=$(docker port ${docker_container} 5001)
-  iperf -f m -u -c localhost -p ${host_port} -P ${num_threads}
+  iperf -f m -u -c localhost -p ${host_port} -P ${num_threads} -M 1300 -m
   docker stop ${docker_container}
   docker rm ${docker_container}
+  sleep 3
   
   header "UDP Test: Docker <-> Docker through host bridge"
-  docker run -p $host_port:5001 -t $image_name bash -c "iperf -u -s" &
+  docker run -d -p $host_port:5001 -t $image_name bash -c "iperf -u -s"
   sleep 1
   docker_container=$(docker ps -q)
   docker_port=$(docker port ${docker_container} 5001)
-  docker run -t iperf bash -c "iperf -f m -u -c \$(ip route | head -1 | awk '{ print \$3 }') -p ${host_port} -P ${num_threads}"
+  docker run -t iperf bash -c "iperf -f m -u -c \$(ip route | head -1 | awk '{ print \$3 }') -p ${host_port} -P ${num_threads} -M 1300 -m"
   docker stop ${docker_container}
   docker rm ${docker_container}
+  sleep 3
 }
 
 build_docker_image
