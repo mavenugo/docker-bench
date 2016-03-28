@@ -34,6 +34,8 @@ install_iperf() {
 }
 
 run_tcp_test() {
+  killall -KILL iperf
+  sleep 3
   header "TCP Test: localhost only"
   iperf -s -D
   iperf -f m -c localhost -P ${num_threads} -M 1300 -m
