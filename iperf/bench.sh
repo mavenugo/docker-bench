@@ -11,7 +11,7 @@
 # by default, set to number of cpus
 # just change this to a number if you want to use something fixed
 num_threads=$(cat /proc/cpuinfo | grep processor | wc -l)
-image_name=iperf
+image_name=mavenugo/iperf
 host_port=7001
 
 header() {
@@ -20,11 +20,6 @@ header() {
   echo $*
   echo "----------------------------------------------------------------------"
   echo
-}
-
-build_docker_image() {
-  header "Building Docker Image"
-  docker build -t $image_name .
 }
 
 install_iperf() {
@@ -91,7 +86,6 @@ run_udp_test() {
   sleep 3
 }
 
-build_docker_image
 install_iperf
 run_tcp_test
 run_udp_test
